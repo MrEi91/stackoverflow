@@ -65,8 +65,26 @@ let login = (req, res, next) => {
   })
 }
 
+let verifyToken = (req, res) => {
+  let params = req.params.token
+  jwt.verify(params, secret, (err, decoded) => {
+    if (err) console.log(err)
+
+    if (!decoded) {
+      res.json({
+        username: false
+      })
+    } else {
+      res.json({
+        username: true
+      })
+    }
+  })
+}
+
 module.exports = {
   getUsers,
   register,
-  login
+  login,
+  verifyToken
 }
