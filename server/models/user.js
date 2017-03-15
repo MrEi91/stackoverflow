@@ -12,9 +12,6 @@ module.exports = function (sequelize, DataTypes) {
         User.hasMany(models.Question)
         User.hasMany(models.Vote)
         User.hasMany(models.Answer)
-        User.belongsToMany(models.Answer, {
-          through: 'Vote'
-        })
       }
     }
   })
