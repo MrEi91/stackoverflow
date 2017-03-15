@@ -1,18 +1,18 @@
 'use strict'
 var passwordHash = require('password-hash')
 
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       validate: {
-        isUnique: function (value, next) {
+        isUnique: function(value, next) {
           User.find({
             where: {
               username: value
             },
             attributes: ['id']
-          }).done(function (user) {
+          }).done(function(user) {
             if (user) {
               return next('Username already in used')
             }
@@ -26,13 +26,13 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       validate: {
         isEmail: true,
-        isUnique: function (value, next) {
+        isUnique: function(value, next) {
           User.find({
             where: {
               email: value
             },
             attributes: ['id']
-          }).done(function (user) {
+          }).done(function(user) {
             if (user) {
               return next('Email address already in used')
             }
@@ -44,7 +44,7 @@ module.exports = function (sequelize, DataTypes) {
     password: DataTypes.STRING
   }, {
     classMethods: {
-      associate: function (models) {
+      associate: function(models) {
         // associations can be defined here
         User.hasMany(models.Question)
         User.hasMany(models.Vote)
@@ -52,9 +52,9 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     hooks: {
-      beforeCreate: function (value, option) {
-        let hashed = passwordHash.generate(value)
-        password = hashed
+      beforeCreate: function(value, option) {
+        let hashed = passwordHash.generate(value.password)
+        value.password = hashed
       }
     }
   })
