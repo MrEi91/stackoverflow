@@ -9,6 +9,8 @@ const app = express()
 
 let question = require('./routes/question')
 let user = require('./routes/user')
+let answer = require('./routes/answer')
+let vote = require('./routes/vote')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -19,6 +21,8 @@ app.use(cors())
 
 app.use('/api', question)
 app.use('/api', user)
+app.use('/api', answer)
+app.use('/api', vote)
 
 app.listen(3000)
 
