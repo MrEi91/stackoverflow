@@ -6,24 +6,40 @@ const models = require('../models')
 let methods = {}
 
 methods.readQuestions = (req, res, next) => {
-  models.Question.findAll()
+  models.Question.findAll({
+      include: [{
+        model: models.Answer
+      }, {
+        model: models.Vote
+      }]
+    })
     .then((questions) => {
       res.send(questions)
     })
-    .catch((e) => {
+    .catch((err) => {
       res.send({
-        error: e
+        error: err
       })
+    })
+}
+
+methods.getQuestion = (req, res, next) => {
+  models.Question.findById(req.params.id)
+    .then((question) => {
+      res.send(question)
+    })
+    .catch((err) => {
+      res.send(err)
     })
 }
 
 methods.createQuestion = (req, res, next) => {
   models.Question.create({
-    title: req.body.title,
-    question_content: req.body.question_content,
-    UserId: req.body.email
+      title: req.body.title,
+      question_content: req.body.question_content,
+      UserId: req.body.id
       // slug: slug(req.body.title).toLowerCase()
-  })
+    })
     .then((question) => {
       res.send({
         message: 'CREATE NEW QUESTION SUCCESS!',
@@ -45,7 +61,9 @@ methods.updateQuestion = (req, res, next) => {
           message: 'QUESTION IS NOT FOUND!'
         })
       } else {
-        question.update(req.body)
+        question.update({
+            question_content: req.body.question
+          })
           .then((result) => {
             res.send({
               message: 'QUESTION HAS BEEN UPDATED!',
