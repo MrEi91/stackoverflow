@@ -7,17 +7,19 @@ let methods = {}
 
 methods.readQuestions = (req, res, next) => {
   models.Question.findAll({
-      include: [{
-        model: models.Answer
-      }, {
+    include: [{
+      model: models.Answer,
+      include: {
         model: models.Vote
-      }]
-    })
+      }
+    }]
+  })
     .then((questions) => {
       res.send(questions)
     })
     .catch((err) => {
       res.send({
+        message: 'error waktu find all',
         error: err
       })
     })
@@ -35,11 +37,11 @@ methods.getQuestion = (req, res, next) => {
 
 methods.createQuestion = (req, res, next) => {
   models.Question.create({
-      title: req.body.title,
-      question_content: req.body.question_content,
-      UserId: req.body.id
+    title: req.body.title,
+    question_content: req.body.question_content,
+    UserId: req.body.id
       // slug: slug(req.body.title).toLowerCase()
-    })
+  })
     .then((question) => {
       res.send({
         message: 'CREATE NEW QUESTION SUCCESS!',
@@ -62,8 +64,8 @@ methods.updateQuestion = (req, res, next) => {
         })
       } else {
         question.update({
-            question_content: req.body.question
-          })
+          question_content: req.body.question
+        })
           .then((result) => {
             res.send({
               message: 'QUESTION HAS BEEN UPDATED!',
