@@ -19,11 +19,11 @@ methods.readQuestions = (req, res, next) => {
 
 methods.createQuestion = (req, res, next) => {
   models.Question.create({
-      title: req.body.title,
-      question_content: req.body.question_content,
-      UserId: req.body.email
+    title: req.body.title,
+    question_content: req.body.question_content,
+    UserId: req.body.email
       // slug: slug(req.body.title).toLowerCase()
-    })
+  })
     .then((question) => {
       res.send({
         message: 'CREATE NEW QUESTION SUCCESS!',
